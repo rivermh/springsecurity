@@ -30,7 +30,7 @@ public class UserService {
 		if(userRepository.existsByUsername(email)) {
 			throw new IllegalStateException("이미 존재하는 이메일입니다.");
 		}
-		
+		 
 		// 3. 비밀번호 암호화
 		String encodedPassword = passwordEncoder.encode(password);
 		

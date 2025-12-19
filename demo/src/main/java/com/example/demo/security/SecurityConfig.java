@@ -20,7 +20,7 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+	 
 	// Security 핵심 설정
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
