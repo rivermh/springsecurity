@@ -44,9 +44,11 @@ public class SecurityConfig {
 			// 로그인 설정
 			.formLogin(login -> login
 					.loginPage("/login")
+					.loginProcessingUrl("/login")
 					.usernameParameter("username")
 					.passwordParameter("password")
 					.defaultSuccessUrl("/", true)
+					.failureUrl("/login?error=ture") // 추가
 			)
 			
 			//로그아웃 설정
@@ -54,7 +56,7 @@ public class SecurityConfig {
 				.logoutSuccessUrl("/")
 			)
 			
-			// 우리가 만든 인증 로직 사용
+			// 내가 만든 인증 로직 사용
 			.userDetailsService(customUserDetailsService);
 		return http.build();
 	}
