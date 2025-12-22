@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+</head>
+<body>
+	
+	<h2>마이페이지</h2>
+	
+	<hr>
+	
+	<div>
+		<p><strong>아이디:</strong> <span th:text="${user.username}"></span></p>
+		<p><strong>이메일:</strong> <span th:text="${user.email}"></span></p>
+		<p><strong>가입일:</strong>
+			<span th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:MM')}"></span>
+		</p>
+	</div>
+	
+	<hr>
+	
+	<div>
+		<a th:href="@{/}">홈으로</a> |
+		<a th:href="@{/logout}">로그아웃</a>
+	</div>
+	
+</body>
+</html>
