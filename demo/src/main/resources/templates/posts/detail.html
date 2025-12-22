@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${post.title}">게시글</title>
+</head>
+<body>
+
+	<h2 th:text="${post.title}"></h2>
+
+	<p>
+		작성자: <span th:text="${post.user.username}"></span> | 작성일: <span
+			th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+	</p>
+
+	<hr>
+
+	<div th:text="${post.content}"></div>
+
+	<hr>
+
+	<a th:href="@{/posts}">목록</a>
+
+</body>
+</html>

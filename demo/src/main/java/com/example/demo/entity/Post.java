@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -16,6 +18,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,12 +49,14 @@ public class Post {
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
 	
+	// Entity가 DB에 처음 저장되기 직전(Insert 쿼리 날리기 직전)
 	@PrePersist
 	public void prePersist() {
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
 	}
 	
+	// Entity가 수정되어 update 쿼리 날리기 직전 (DB반영 직전에 시간만 자동 세팅하는 역할)
 	@PreUpdate
 	public void preUpdate() {
 		this.updatedAt = LocalDateTime.now();
