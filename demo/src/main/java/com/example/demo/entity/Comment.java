@@ -2,7 +2,7 @@ package com.example.demo.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,31 +26,31 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	//댓글 작성자 (연관관계 주인은 Comment)
+
+	// 댓글 작성자 (연관관계 주인은 Comment)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-	
-	//댓글이 달린 게시글
+
+	// 댓글이 달린 게시글
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id", nullable = false)
 	private Post post;
-	
-	//댓글 내용
+
+	// 댓글 내용
 	@Column(nullable = false, length = 500)
 	private String content;
-	
+
 	@Column(nullable = false)
 	private LocalDateTime createdAt;
-	
-	//생성 시각 자동 생성
+
+	// 생성 시각 자동 생성
 	@PrePersist
 	public void prePersist() {
 		this.createdAt = LocalDateTime.now();
 	}
-	
-	//생성 메서드(팩토리)
+
+	// 생성 메서드(팩토리)
 	public static Comment create(User user, Post post, String content) {
 		Comment comment = new Comment();
 		comment.user = user;
