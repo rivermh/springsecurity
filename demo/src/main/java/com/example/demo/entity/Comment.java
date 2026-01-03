@@ -58,4 +58,9 @@ public class Comment {
 		comment.content = content;
 		return comment;
 	}
+	
+	// 댓글 수정
+	public void update(String content) {
+		this.content = content;
+	}
 }

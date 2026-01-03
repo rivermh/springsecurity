@@ -1,19 +1,20 @@
 package com.example.demo.service;
 
-import java.lang.reflect.Member;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.CommentCreateDto;
+import com.example.demo.dto.CommentResponseDto;
+import com.example.demo.dto.CommentUpdateDto;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Post;
 import com.example.demo.entity.User;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.dto.CommentResponseDto;
+import com.example.demo.dto.CommentUpdateDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -74,6 +75,19 @@ public class CommentService {
 	            .toList();
 	}
 
+	//댓글 수정
+	@Transactional
+	public void update(Long commentId, String username, CommentUpdateDto dto) {
+		Comment comment = commentRepository.findById(commentId)
+				.orElseThrow(()-> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+		
+		// 작성자 검증
+		if(!comment.getUser().getUsername().equals(username)) {
+			throw new SecurityException("수정 권한이 없습니다.");
+		}
+		
+		comment.update(dto.getContent());
+	}
 	
 	//댓글 삭제
 	public void delete(Long commentId, String username) {
@@ -91,4 +105,5 @@ public class CommentService {
 		
 		commentRepository.delete(comment);
 	}
+	
 }
