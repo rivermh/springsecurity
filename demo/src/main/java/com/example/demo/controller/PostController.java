@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.dto.PostDetailDto;
 import com.example.demo.dto.PostEditDto;
 import com.example.demo.entity.Post;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.PostService;
+import com.example.demo.service.PostLikeService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class PostController {
 
 	private final PostService postService;
+	private final PostLikeService postLikeService;
 	
 	// 게시글 목록
 	@GetMapping
@@ -50,17 +54,20 @@ public class PostController {
 	
 	//게시글 상세
 	@GetMapping("/{id}")
-	public String detail(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-		Post post = postService.findById(id);
-		model.addAttribute("post", post);
-		
-		// 로그인 사용자 정보 전달(중요)
-		if(userDetails != null) {
-			model.addAttribute("loginUser", userDetails);
-		}
-		
-		return "posts/detail";
+	public String detail(@PathVariable Long id,
+	                     @AuthenticationPrincipal CustomUserDetails userDetails,
+	                     Model model) {
+	    PostDetailDto postDto = postService.getPostDetail(id);
+	    model.addAttribute("post", postDto);
+
+	    // 로그인 사용자 전달
+	    if(userDetails != null) {
+	        model.addAttribute("loginUser", userDetails);
+	    }
+
+	    return "posts/detail";
 	}
+
 	
 	//게시글 수정 페이지 (DTO)
 	@GetMapping("/{id}/edit")
@@ -89,4 +96,16 @@ public class PostController {
 		return "redirect:/posts";
 	}
 	
+	// 좋아요 토글 API
+	@PostMapping("/{postId}/like")
+	@ResponseBody
+	public LikeResponse toggleLike(@PathVariable("postId") Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+		Post post = postService.findById(postId); // PostService에서 게시글 조회
+		boolean liked = postLikeService.toggleLike(post, userDetails.getUser());
+		long likeCount = postLikeService.getLikeCount(post);
+		return new LikeResponse(liked, likeCount);
+	}
+	
+	// 좋아요 DTO 정의
+	public record LikeResponse(boolean liked, long likeCount) {}
 }

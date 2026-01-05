@@ -51,6 +51,7 @@ public class CommentRestController {
         return commentService.findByPost(postId, loginUser);
     }
     
+    // 댓글 수정
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<Void> update(
             @PathVariable Long commentId,

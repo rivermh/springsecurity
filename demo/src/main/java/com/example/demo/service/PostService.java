@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.dto.PostDetailDto;
 import com.example.demo.dto.PostEditDto;
 import com.example.demo.entity.Post;
 import com.example.demo.entity.User;
@@ -21,6 +22,12 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
 	
+	//글 목록 조회 > List<Post>
+	@Transactional(readOnly = true)
+	public List<Post> findAll() {
+	    return postRepository.findAllByOrderByCreatedAtDesc();
+	}
+	
 	// 글 작성
 	public Long write(String username, String title, String content) {
 		User user = userRepository.findByUsername(username)
@@ -31,13 +38,22 @@ public class PostService {
 	return post.getId();
 	}
 	
-	// 글 목록
+	// 글 상세조회
 	@Transactional(readOnly = true)
-	public List<Post> findAll(){
-		return postRepository.findAllByOrderByCreatedAtDesc();
+	public PostDetailDto getPostDetail(Long postId) {
+	    Post post = findById(postId); // 세션 안에서 접근
+	    return new PostDetailDto(
+	            post.getId(),
+	            post.getTitle(),
+	            post.getContent(),
+	            post.getUser().getUsername(),
+	            post.getLikes().size(),
+	            post.getCreatedAt()
+	    );
 	}
+
 	
-	//글 상세/수정 공용
+	//Entity 직접 조회 > 내부/CRUD용
 	public Post findById(Long postId) {
 	    return postRepository.findWithUserById(postId)
 	        .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));

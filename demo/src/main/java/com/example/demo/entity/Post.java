@@ -85,4 +85,9 @@ public class Post {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PostLike> likes = new ArrayList<>();
 	
+	// 게시글 삭제 시 댓글도 같이 삭제 , 부모와 관계 끊긴 자식 자동 제거
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<>();
+
+	
 }
