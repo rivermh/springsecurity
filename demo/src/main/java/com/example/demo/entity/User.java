@@ -58,11 +58,12 @@ public class User {
 		this.createdAt = LocalDateTime.now();
 	}
 	
-	// 비즈니스 메서드
+	// changePassword
 	public void changePassword(String password) {
 		this.password = password;
 	}
 	
+	// changeEmail
 	public void changeEmail(String email) {
 		this.email = email;
 	}

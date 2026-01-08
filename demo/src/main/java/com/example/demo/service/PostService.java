@@ -105,8 +105,10 @@ public class PostService {
 	}
 	
 	//페이징 처리 
-	public Page<Post> getPostPage(int page){
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
-		return postRepository.findAll(pageable);
+	public Page<Post> getPostPage(int page) {
+	    Pageable pageable =
+	        PageRequest.of(page, 5, Sort.by("id").descending());
+
+	    return postRepository.findAllWithUser(pageable);
 	}
 }

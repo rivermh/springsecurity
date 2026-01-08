@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,84 +29,90 @@ public class PostController {
 
 	private final PostService postService;
 	private final PostLikeService postLikeService;
-	
+
 	// 게시글 목록
 	@GetMapping
-	public String list(Model model) {
-		List<Post> posts = postService.findAll();
-		model.addAttribute("posts", posts);
+	public String list(@RequestParam(defaultValue = "0") int page, Model model) {
+		Page<Post> postPage = postService.getPostPage(page);
+
+		model.addAttribute("postPage", postPage);
+		model.addAttribute("posts", postPage.getContent()); // 실제 게시글 목록
+		model.addAttribute("currentPage", page);
+
 		return "posts/list";
 	}
-	
-	//글 작성 폼
+
+	// 글 작성 폼
 	@GetMapping("/new")
 	public String writerForm() {
 		return "posts/form";
 	}
-	
-	//글 작성 처리
+
+	// 글 작성 처리
 	@PostMapping
-	public String write(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String title, @RequestParam String content) {
+	public String write(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String title,
+			@RequestParam String content) {
 		postService.write(userDetails.getUsername(), title, content);
-		
+
 		return "redirect:/posts";
-		
+
 	}
-	
-	//게시글 상세
+
+	// 게시글 상세
 	@GetMapping("/{id}")
-	public String detail(@PathVariable Long id,
-	                     @AuthenticationPrincipal CustomUserDetails userDetails,
-	                     Model model) {
-	    PostDetailDto postDto = postService.getPostDetail(id);
-	    model.addAttribute("post", postDto);
+	public String detail(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+		PostDetailDto postDto = postService.getPostDetail(id);
+		model.addAttribute("post", postDto);
 
-	    // 로그인 사용자 전달
-	    if(userDetails != null) {
-	        model.addAttribute("loginUser", userDetails);
-	    }
+		// 로그인 사용자 전달
+		if (userDetails != null) {
+			model.addAttribute("loginUser", userDetails);
+		}
 
-	    return "posts/detail";
+		return "posts/detail";
 	}
 
-	
-	//게시글 수정 페이지 (DTO)
+	// 게시글 수정 페이지 (DTO)
 	@GetMapping("/{id}/edit")
 	public String editForm(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
 		// 수정 페이지에 필요한 데이터 조회(DTO)
 		PostEditDto post = postService.getEditPost(id, userDetails.getUsername());
 		model.addAttribute("post", post);
-		
+
 		return "posts/edit";
 	}
-	
-	// 게시글 수정 처리 (POST) 
+
+	// 게시글 수정 처리 (POST)
 	@PostMapping("/{id}/edit")
-	public String edit(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String title, @RequestParam String content) {
-		
+	public String edit(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails,
+			@RequestParam String title, @RequestParam String content) {
+
 		// 실제 게시글 수정(Dirty Checking)
 		postService.update(id, userDetails.getUsername(), title, content);
-		
+
 		return "redirect:/posts/" + id;
 	}
-	//게시글 삭제 처리
+
+	// 게시글 삭제 처리
 	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		postService.delete(id, userDetails.getUsername());
-		
+
 		return "redirect:/posts";
 	}
-	
+
 	// 좋아요 토글 API
 	@PostMapping("/{postId}/like")
 	@ResponseBody
-	public LikeResponse toggleLike(@PathVariable("postId") Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+	public LikeResponse toggleLike(@PathVariable("postId") Long postId,
+			@AuthenticationPrincipal CustomUserDetails userDetails) {
 		Post post = postService.findById(postId); // PostService에서 게시글 조회
 		boolean liked = postLikeService.toggleLike(post, userDetails.getUser());
 		long likeCount = postLikeService.getLikeCount(post);
 		return new LikeResponse(liked, likeCount);
 	}
-	
+
 	// 좋아요 DTO 정의
-	public record LikeResponse(boolean liked, long likeCount) {}
+	public record LikeResponse(boolean liked, long likeCount) {
+	}
 }
