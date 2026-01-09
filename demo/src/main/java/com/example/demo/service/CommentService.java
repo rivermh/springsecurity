@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.dto.CommentUpdateDto;
+import org.springframework.data.domain.Pageable;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,31 +51,32 @@ public class CommentService {
 
 	// 댓글 목록 조회
 	@Transactional(readOnly = true)
-	public List<CommentResponseDto> findByPost(Long postId, User loginUser) {
+	public Page<CommentResponseDto> findByPost(
+	        Long postId,
+	        int page,
+	        User loginUser
+	) {
+	    Pageable pageable = PageRequest.of(page, 10);
 
-	    List<Comment> comments =
-	            commentRepository.findByPostIdOrderByCreatedAtAsc(postId);
+	    Page<Comment> commentPage =
+	            commentRepository.findByPostIdOrderByCreatedAtAsc(postId, pageable);
 
-	    return comments.stream()
-	            .map(comment -> {
+	    return commentPage.map(comment -> {
 
-	            	boolean isMine = false;
+	        boolean isMine = false;
+	        if (loginUser != null) {
+	            isMine = comment.getUser().getUsername()
+	                    .equals(loginUser.getUsername());
+	        }
 
-	            	if (loginUser != null) {
-	            	    isMine = comment.getUser().getUsername()
-	            	            .equals(loginUser.getUsername());
-	            	}
-
-
-	                return new CommentResponseDto(
-	                        comment.getId(),
-	                        comment.getContent(),
-	                        comment.getUser().getUsername(),
-	                        comment.getCreatedAt().toString(),
-	                        isMine
-	                );
-	            })
-	            .toList();
+	        return new CommentResponseDto(
+	                comment.getId(),
+	                comment.getContent(),
+	                comment.getUser().getUsername(),
+	                comment.getCreatedAt().toString(),
+	                isMine
+	        );
+	    });
 	}
 
 	//댓글 수정

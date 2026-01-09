@@ -2,14 +2,15 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.common.PostSearchType;
+import com.example.demo.common.PostSortType;
 import com.example.demo.dto.PostDetailDto;
 import com.example.demo.dto.PostEditDto;
 import com.example.demo.entity.Post;
@@ -94,29 +95,39 @@ public class PostService {
 		postRepository.delete(post);
 	}
 
-	// 페이징 처리 or 검색기능
-	public Page<Post> getPostPage(int page, PostSearchType searchType, String keyword) {
-	    Pageable pageable =
-	        PageRequest.of(page, 5, Sort.by("id").descending());
-	    
-	    // 검색어 없으면 전체 조회
-	    if(keyword == null || keyword.isBlank()) {
-	    	return postRepository.findAllWithUser(pageable);
-	    }
+	// 페이징 + 검색
+	public Page<Post> getPostPage(int page, PostSearchType searchType, String keyword, PostSortType sortType) {
 
-	    // 검색 타입 없으면 기본값 (TITLE)
-	    if(searchType == null) {
-	    	searchType = PostSearchType.TITLE;
-	    }
-	    
-	    
-	   return switch(searchType) {
-	   case TITLE ->
-	   		postRepository.searchByTitle(keyword, pageable);
-	   case CONTENT ->
-	   		postRepository.searchByTitle(keyword, pageable);
-	   case AUTHOR ->
-	   		postRepository.searchByTitle(keyword, pageable);
-	   };
+		// 기본 검색 타입
+		if (searchType == null) {
+			searchType = PostSearchType.TITLE;
+		}
+
+		// 기본 정렬
+		if (sortType == null) {
+			sortType = PostSortType.LATEST;
+		}
+
+		Pageable pageable = PageRequest.of(page, 5, getSort(sortType));
+
+		// 검색어 없으면 전체 조회
+		if (keyword == null || keyword.isBlank()) {
+			return postRepository.findAllWithUser(pageable);
+		}
+
+		return switch (searchType) {
+		case TITLE -> postRepository.searchByTitle(keyword, pageable);
+		case CONTENT -> postRepository.searchByContent(keyword, pageable);
+		case AUTHOR -> postRepository.searchByAuthor(keyword, pageable);
+		};
 	}
+
+	private Sort getSort(PostSortType sortType) {
+		return switch (sortType) {
+		case LATEST -> Sort.by("createdAt").descending();
+		case OLDEST -> Sort.by("createdAt").ascending();
+		case TITLE -> Sort.by("title").ascending();
+		};
+	}
+
 }

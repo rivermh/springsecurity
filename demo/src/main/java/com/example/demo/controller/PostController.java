@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.common.PostSearchType;
+import com.example.demo.common.PostSortType;
 import com.example.demo.dto.PostDetailDto;
 import com.example.demo.dto.PostEditDto;
 import com.example.demo.entity.Post;
@@ -36,15 +37,17 @@ public class PostController {
 	public String list(
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(required = false) String keyword,
-			@RequestParam(required = false) PostSearchType searchType,
+			@RequestParam(defaultValue = "TITLE") PostSearchType searchType,
+			@RequestParam(defaultValue = "LATEST") PostSortType sortType,
 			Model model) {
-		Page<Post> postPage = postService.getPostPage(page, searchType, keyword);
+		Page<Post> postPage = postService.getPostPage(page, searchType, keyword, sortType);
 
 		model.addAttribute("postPage", postPage);
 		model.addAttribute("posts", postPage.getContent()); // 실제 게시글 목록
 		model.addAttribute("currentPage", page);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("searchType", searchType);
+		model.addAttribute("sortType", sortType);
 
 		return "posts/list";
 	}

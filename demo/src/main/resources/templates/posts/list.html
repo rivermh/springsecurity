@@ -17,6 +17,19 @@
 	<form th:action="@{/posts}" method="get"
 		class="row g-2 mb-3 justify-content-end">
 
+		<!-- 정렬 -->
+		<div class="col-auto">
+			<select name="sortType" class="form-select">
+				<option value="LATEST"
+					th:selected="${sortType == null || sortType.name() == 'LATEST'}">
+					최신순</option>
+				<option value="OLDEST" th:selected="${sortType?.name() == 'OLDEST'}">
+					오래된순</option>
+				<option value="TITLE" th:selected="${sortType?.name() == 'TITLE'}">
+					제목순</option>
+			</select>
+		</div>
+
 		<!-- 검색 타입 -->
 		<div class="col-auto">
 			<select name="searchType" class="form-select">
@@ -39,6 +52,8 @@
 		<div class="col-auto">
 			<button type="submit" class="btn btn-outline-secondary">검색</button>
 		</div>
+
+
 	</form>
 
 	<!-- 게시글 목록 -->
@@ -80,49 +95,55 @@
 		</div>
 	</div>
 
-	<!-- 페이징 -->
-	<nav class="mt-4">
-		<ul class="pagination justify-content-center">
+<!-- 페이징 -->
+<nav class="mt-4" th:if="${postPage.totalPages > 0}">
+    <ul class="pagination justify-content-center">
 
-			<!-- 이전 -->
-			<li class="page-item" th:classappend="${postPage.first} ? 'disabled'">
-				<a class="page-link"
-				th:href="@{/posts(
-                   page=${postPage.first ? 0 : postPage.number - 1},
+        <!-- 이전 -->
+        <li class="page-item"
+            th:classappend="${postPage.first} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/posts(
+                   page=${postPage.number - 1},
                    keyword=${keyword},
-                   searchType=${searchType}
+                   searchType=${searchType},
+                   sortType=${sortType}
                )}">
-					이전 </a>
-			</li>
+                이전
+            </a>
+        </li>
 
-			<!-- 페이지 번호 -->
-			<li class="page-item"
-				th:each="i : ${#numbers.sequence(
-                T(java.lang.Math).max(0, postPage.number - 2),
-                T(java.lang.Math).min(postPage.totalPages - 1, postPage.number + 2)
-            )}"
-				th:classappend="${i == postPage.number} ? 'active'"><a
-				class="page-link"
-				th:href="@{/posts(
+        <!-- 페이지 번호 -->
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(0, postPage.totalPages - 1)}"
+            th:classappend="${i == postPage.number} ? 'active'">
+            <a class="page-link"
+               th:href="@{/posts(
                    page=${i},
                    keyword=${keyword},
-                   searchType=${searchType}
+                   searchType=${searchType},
+                   sortType=${sortType}
                )}"
-				th:text="${i + 1}"> </a></li>
+               th:text="${i + 1}">
+            </a>
+        </li>
 
-			<!-- 다음 -->
-			<li class="page-item" th:classappend="${postPage.last} ? 'disabled'">
-				<a class="page-link"
-				th:href="@{/posts(
-                   page=${postPage.last ? postPage.totalPages - 1 : postPage.number + 1},
+        <!-- 다음 -->
+        <li class="page-item"
+            th:classappend="${postPage.last} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/posts(
+                   page=${postPage.number + 1},
                    keyword=${keyword},
-                   searchType=${searchType}
+                   searchType=${searchType},
+                   sortType=${sortType}
                )}">
-					다음 </a>
-			</li>
+                다음
+            </a>
+        </li>
 
-		</ul>
-	</nav>
+    </ul>
+</nav>
 
 
 </th:block>
