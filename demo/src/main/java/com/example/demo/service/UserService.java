@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 
+import java.time.LocalDate;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	
 	// 회원가입
-	public void register(String username, String password, String email) {
+	public void register(String username, String password, String email, LocalDate birth) {
 		// 1. 아이디 중복 체크
 		if(userRepository.existsByUsername(username)) {
 			throw new IllegalStateException("이미 존재하는 아이디 입니다.");
@@ -39,6 +41,7 @@ public class UserService {
 				.username(username)
 				.password(encodedPassword)
 				.email(email)
+				.birth(birth)
 				.role(Role.USER) // 기본 권한
 				.build();
 		

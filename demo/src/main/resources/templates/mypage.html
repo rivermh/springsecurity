@@ -1,65 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:replace="~{layout/layout :: layout(content=~{::content})}">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{layout/layout :: layout(content=~{::content})}">
 
 <th:block th:fragment="content">
 
-    <div class="row justify-content-center">
-        <div class="col-md-7 col-lg-5">
+	<div class="row justify-content-center">
+		<div class="col-md-7 col-lg-5">
 
-            <div class="card shadow-sm border-0 mt-5">
-                <div class="card-body p-4">
+			<div class="card shadow-sm border-0 mt-5">
+				<div class="card-body p-4">
 
-                    <h3 class="text-center fw-bold mb-4">
-                        마이페이지
-                    </h3>
+					<h3 class="text-center fw-bold mb-4">mypage</h3>
 
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-muted">아이디</span>
-                            <span class="fw-semibold"
-                                  th:text="${user.username}"></span>
-                        </div>
-                    </div>
+					<div class="mb-3">
+						<div class="d-flex justify-content-between">
+							<span class="text-muted">아이디</span> <span class="fw-semibold"
+								th:text="${user.username}"></span>
+						</div>
+					</div>
 
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-muted">이메일</span>
-                            <span th:text="${user.email}"></span>
-                        </div>
-                    </div>
+					<div class="mb-3">
+						<div class="d-flex justify-content-between">
+							<span class="text-muted">이메일</span> <span th:text="${user.email}"></span>
+						</div>
+					</div>
 
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-muted">가입일</span>
-                            <span
-                                th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">
-                            </span>
-                        </div>
-                    </div>
+					<div class="mb-3">
+						<div class="d-flex justify-content-between">
+							<span class="text-muted">생년월일</span> <span
+								th:text="${user.birth}"></span>
+						</div>
+					</div>
 
-                    <hr>
+						<div class="mb-4">
+							<div class="d-flex justify-content-between">
+								<span class="text-muted">가입일</span> <span
+									th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">
+								</span>
+							</div>
+						</div>
 
-                    <div class="d-flex gap-2">
-                        <a th:href="@{/}"
-                           class="btn btn-outline-secondary w-50">
-                            홈으로
-                        </a>
+						<hr>
 
-                        <form th:action="@{/logout}" method="post" class="w-50">
-                            <button type="submit"
-                                    class="btn btn-outline-danger w-100">
-                                로그아웃
-                            </button>
-                        </form>
-                    </div>
+						<div class="d-flex gap-2">
+							<a th:href="@{/}" class="btn btn-outline-secondary w-50"> home
+							</a>
 
-                </div>
-            </div>
+							<form th:action="@{/logout}" method="post" class="w-50">
+								<button type="submit" class="btn btn-outline-danger w-100">
+									logout</button>
+							</form>
+						</div>
 
-        </div>
-    </div>
+					</div>
+				</div>
 
+			</div>
+		</div>
 </th:block>
 </html>

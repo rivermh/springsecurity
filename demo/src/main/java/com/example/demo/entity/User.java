@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -35,6 +36,9 @@ public class User {
 	@Column(nullable = false, unique = true)
 	private String email;
 	
+	@Column(nullable = false)
+	private LocalDate birth;
+	
 	//권한
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -45,10 +49,11 @@ public class User {
 	private LocalDateTime createdAt;
 	
 	@Builder
-	private User(String username, String password, String email, Role role) {
+	private User(String username, String password, String email, LocalDate birth, Role role) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
+		this.birth = birth;
 		this.role = role;
 	}
 	

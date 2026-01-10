@@ -95,55 +95,49 @@
 		</div>
 	</div>
 
-<!-- 페이징 -->
-<nav class="mt-4" th:if="${postPage.totalPages > 0}">
-    <ul class="pagination justify-content-center">
+	<!-- 페이징 -->
+	<nav class="mt-4" th:if="${postPage.totalPages > 0}">
+		<ul class="pagination justify-content-center">
 
-        <!-- 이전 -->
-        <li class="page-item"
-            th:classappend="${postPage.first} ? 'disabled'">
-            <a class="page-link"
-               th:href="@{/posts(
+			<!-- 이전 -->
+			<li class="page-item" th:classappend="${postPage.first} ? 'disabled'">
+				<a class="page-link"
+				th:href="@{/posts(
                    page=${postPage.number - 1},
                    keyword=${keyword},
                    searchType=${searchType},
                    sortType=${sortType}
                )}">
-                이전
-            </a>
-        </li>
+					이전 </a>
+			</li>
 
-        <!-- 페이지 번호 -->
-        <li class="page-item"
-            th:each="i : ${#numbers.sequence(0, postPage.totalPages - 1)}"
-            th:classappend="${i == postPage.number} ? 'active'">
-            <a class="page-link"
-               th:href="@{/posts(
+			<!-- 페이지 번호 -->
+			<li class="page-item"
+				th:each="i : ${#numbers.sequence(0, postPage.totalPages - 1)}"
+				th:classappend="${i == postPage.number} ? 'active'"><a
+				class="page-link"
+				th:href="@{/posts(
                    page=${i},
                    keyword=${keyword},
                    searchType=${searchType},
                    sortType=${sortType}
                )}"
-               th:text="${i + 1}">
-            </a>
-        </li>
+				th:text="${i + 1}"> </a></li>
 
-        <!-- 다음 -->
-        <li class="page-item"
-            th:classappend="${postPage.last} ? 'disabled'">
-            <a class="page-link"
-               th:href="@{/posts(
+			<!-- 다음 -->
+			<li class="page-item" th:classappend="${postPage.last} ? 'disabled'">
+				<a class="page-link"
+				th:href="@{/posts(
                    page=${postPage.number + 1},
                    keyword=${keyword},
                    searchType=${searchType},
                    sortType=${sortType}
                )}">
-                다음
-            </a>
-        </li>
+					다음 </a>
+			</li>
 
-    </ul>
-</nav>
+		</ul>
+	</nav>
 
 
 </th:block>

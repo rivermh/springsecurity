@@ -56,7 +56,7 @@ public class CommentService {
 	        int page,
 	        User loginUser
 	) {
-	    Pageable pageable = PageRequest.of(page, 10);
+	    Pageable pageable = PageRequest.of(page, 5);
 
 	    Page<Comment> commentPage =
 	            commentRepository.findByPostIdOrderByCreatedAtAsc(postId, pageable);

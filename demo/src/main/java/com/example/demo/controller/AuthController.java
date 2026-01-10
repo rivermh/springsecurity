@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +26,15 @@ public class AuthController {
 
 	// 회원가입 처리
 	@PostMapping("/register")
-	public String register(@RequestParam String username, @RequestParam String password, @RequestParam String email) {
-		userService.register(username, password, email);
+	public String register(
+			@RequestParam String username,
+			@RequestParam String password,
+			@RequestParam String email,
+			@RequestParam
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+			LocalDate birth
+	) {
+		userService.register(username, password, email, birth);
 		return "redirect:/login";
 	}
 }
