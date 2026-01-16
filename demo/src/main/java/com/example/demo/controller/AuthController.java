@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import java.time.LocalDate;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,11 +30,15 @@ public class AuthController {
 			@RequestParam String username,
 			@RequestParam String password,
 			@RequestParam String email,
-			@RequestParam
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			LocalDate birth
+			@RequestParam LocalDate birth,
+			Model model
 	) {
-		userService.register(username, password, email, birth);
-		return "redirect:/login";
+		try {
+			userService.register(username, password, email, birth);
+			return "redirect:/login";
+		}catch(IllegalStateException e) {
+			model.addAttribute("error", e.getMessage());
+			return "register";
+		}
 	}
 }
