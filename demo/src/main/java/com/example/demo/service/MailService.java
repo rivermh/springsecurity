@@ -14,7 +14,7 @@ public class MailService {
     
     public void sendVerificationMail(String to, String token) {
     	String link = "http://localhost:8080/verify-email?token=" + token;
-    	
+    	 
     	SimpleMailMessage message = new SimpleMailMessage();
     	message.setTo(to);
     	message.setSubject("[회원가입] 이메일 인증");

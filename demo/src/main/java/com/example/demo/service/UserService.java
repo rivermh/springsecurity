@@ -48,7 +48,7 @@ public class UserService {
 	    // 3. 이메일 형식
 	    if (!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
 	        throw new IllegalStateException("이메일 형식이 올바르지 않습니다.");
-	    }
+	    } 
 		
 		// 4. 아이디 중복 체크
 		if(userRepository.existsByUsername(username)) {
