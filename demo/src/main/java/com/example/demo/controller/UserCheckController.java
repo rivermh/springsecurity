@@ -19,7 +19,7 @@ public class UserCheckController {
 	public boolean checkUsername(@RequestParam String username) {
 		if(username == null || username.trim().isEmpty()) {
 			return false;
-		}
+		} 
 		return !userService.existsByUsername(username);
 	}
 	

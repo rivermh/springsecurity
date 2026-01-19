@@ -42,7 +42,7 @@ public class User {
 	// 생년월일
 	@Column(nullable = false)
 	private LocalDate birth;
-	
+	 
 	// 이메일 인증 전엔 enabled = false
 	@Column(nullable = false)
 	private boolean enabled;

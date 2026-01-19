@@ -23,7 +23,7 @@ spring:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
- 
+  
   mvc: 
     hiddenmethod:
       filter:

@@ -33,7 +33,7 @@ public class PostService {
 	public List<Post> findAll() {
 		return postRepository.findAllByOrderByCreatedAtDesc();
 	}
-
+ 
 	// 글 작성
 	public Long write(String username, String title, String content) {
 		User user = userRepository.findByUsername(username)

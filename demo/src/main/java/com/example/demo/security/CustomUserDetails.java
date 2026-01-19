@@ -16,7 +16,7 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(User user) {
         this.user = user;
     }
- 
+  
     /**
      * 권한 정보
      */

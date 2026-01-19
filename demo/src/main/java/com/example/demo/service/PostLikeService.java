@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class PostLikeService {
 
     private final PostLikeRepository postLikeRepository;
-
+ 
     @Transactional
     public boolean toggleLike(Post post, User user) {
         return postLikeRepository.findByPostAndUser(post, user)

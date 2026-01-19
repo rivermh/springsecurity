@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MailService {
-
+ 
     private final JavaMailSender mailSender;
     
     public void sendVerificationMail(String to, String token) {

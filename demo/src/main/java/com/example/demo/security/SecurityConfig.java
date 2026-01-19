@@ -27,7 +27,7 @@ public class SecurityConfig {
 		http
 			// 개발 단계에서는 CSRF 비활성화
 			.csrf(csrf -> csrf.disable())
-			
+			 
 			
 			// 요청 권한 설정
 			.authorizeHttpRequests(auth -> auth
