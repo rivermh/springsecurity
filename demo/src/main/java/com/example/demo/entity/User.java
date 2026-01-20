@@ -81,5 +81,11 @@ public class User {
 	public void changeEmail(String email) {
 		this.email = email;
 	}
+	
+	// 이메일 인증 완료 시 계정 활성화
+	public void activate() {
+	    this.enabled = true;
+	}
+
 }
 

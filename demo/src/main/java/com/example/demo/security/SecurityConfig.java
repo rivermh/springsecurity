@@ -37,6 +37,7 @@ public class SecurityConfig {
 							"/register",
 					        "/users/check-username",
 					        "/users/check-email",
+					        "/verify-email",
 							"/css/**",
 							"/js/**"
 					).permitAll()

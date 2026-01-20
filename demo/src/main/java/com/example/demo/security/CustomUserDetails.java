@@ -62,9 +62,9 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.isEnabled();
     }
-
+    
     /* ===== 필요하면 User 꺼내 쓰기 ===== */
     public User getUser() {
         return user;

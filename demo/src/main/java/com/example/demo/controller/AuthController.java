@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.service.UserService;
 
@@ -27,18 +28,25 @@ public class AuthController {
 	// 회원가입 처리
 	@PostMapping("/register")
 	public String register(
-			@RequestParam String username,
-			@RequestParam String password,
-			@RequestParam String email,
-			@RequestParam LocalDate birth,
-			Model model
+	        @RequestParam String username,
+	        @RequestParam String password,
+	        @RequestParam String email,
+	        @RequestParam LocalDate birth,
+	        RedirectAttributes redirectAttributes
 	) {
-		try {
-			userService.register(username, password, email, birth);
-			return "redirect:/login";
-		}catch(IllegalStateException e) {
-			model.addAttribute("error", e.getMessage());
-			return "register";
-		}
+	    try {
+	        userService.register(username, password, email, birth);
+
+	        redirectAttributes.addFlashAttribute(
+	            "message",
+	            "입력하신 이메일로 인증 메일을 발송했습니다. 메일을 확인해주세요."
+	        );
+
+	        return "redirect:/register";
+
+	    } catch (IllegalStateException e) {
+	        redirectAttributes.addFlashAttribute("error", e.getMessage());
+	        return "redirect:/register";
+	    }
 	}
 }

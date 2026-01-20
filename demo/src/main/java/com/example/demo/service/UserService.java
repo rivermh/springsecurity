@@ -2,13 +2,18 @@ package com.example.demo.service;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.EmailVerificationToken;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.EmailVerificationTokenRepository;
+import com.example.demo.service.MailService;
 
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +25,8 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final EmailVerificationTokenRepository tokenRepository;
+	private final MailService mailService;
 	
 	// 중복 체크용 아이디, 이메일
 	@Transactional(readOnly = true)
@@ -70,10 +77,30 @@ public class UserService {
 				.email(email)
 				.birth(birth)
 				.role(Role.USER) // 기본 권한
+				.enabled(false)
 				.build();
 		
 		// 8. 저장
 		userRepository.save(user);
+
+		// 🔥 기존 토큰 있으면 삭제
+		tokenRepository.findByUser(user)
+		        .ifPresent(tokenRepository::delete);
+
+		// 9. 토큰 생성
+		String token = UUID.randomUUID().toString();
+
+		EmailVerificationToken verificationToken =
+		        EmailVerificationToken.builder()
+		            .token(token)
+		            .user(user)
+		            .expiryDate(LocalDateTime.now().plusMinutes(30))
+		            .build();
+
+		tokenRepository.save(verificationToken);
+
+		// 10. 메일 발송
+		mailService.sendVerificationMail(email, token);
 	}
 	
 	// 조회 메서드 
