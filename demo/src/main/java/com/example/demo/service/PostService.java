@@ -130,4 +130,9 @@ public class PostService {
 		};
 	}
 
+	// 마이페이지 내가 쓴글 확인
+	public Page<Post> findMyPosts(Long userId, Pageable pageable){
+		return postRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+	}
+	
 }

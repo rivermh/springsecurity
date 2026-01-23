@@ -51,7 +51,7 @@ public class SecurityConfig {
 					.usernameParameter("username")
 					.passwordParameter("password")
 					.defaultSuccessUrl("/", true)
-					.failureUrl("/login?error=ture") // 추가
+					.failureUrl("/login?error=true") 
 			)
 			
 			//로그아웃 설정

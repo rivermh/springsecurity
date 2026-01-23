@@ -48,4 +48,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 			""")
 	Page<Post> searchByAuthor(@Param("keyword") String keyword, Pageable pageable);
 
+	// 마이페이지 내가 쓴 게시글
+	@EntityGraph(attributePaths = "user")
+	Page<Post> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+
 }

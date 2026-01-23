@@ -1,5 +1,9 @@
 package com.example.demo.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,5 +39,10 @@ public class PostLikeService {
 
     public long getLikeCount(Post post) {
         return postLikeRepository.countByPost(post);
+    }
+    
+    public Page<Post> findLikePosts(Long userId, Pageable pageable) {
+        return postLikeRepository.findByUserId(userId, pageable)
+                .map(PostLike::getPost);
     }
 }

@@ -110,4 +110,9 @@ public class CommentService {
 		commentRepository.delete(comment);
 	}
 	
+	// 마이페이지 내가 쓴 댓글 보기
+	public Page<Comment> findMyComments(Long userId, Pageable pageable){
+		return commentRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+	}
+	
 }

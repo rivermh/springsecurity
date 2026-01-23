@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/layout :: layout(content=~{::content})}">
+
+<th:block th:fragment="content">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-sm border-0 mt-5">
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">내가 쓴 댓글</h4>
+
+                    <!-- 댓글 없는 경우 -->
+                    <div th:if="${comments.totalElements == 0}"
+                         class="text-center text-muted py-5">
+                        아직 작성한 댓글이 없습니다.
+                    </div>
+
+                    <!-- 댓글 목록 -->
+                    <div th:if="${comments.totalElements > 0}"
+                         class="list-group">
+
+                        <a th:each="comment : ${comments.content}"
+                           th:href="@{/posts/{id}(id=${comment.post.id})}"
+                           class="list-group-item list-group-item-action">
+
+                            <!-- 게시글 제목 -->
+                            <div class="fw-semibold mb-1"
+                                 th:text="${comment.post.title}">
+                                게시글 제목
+                            </div>
+
+                            <!-- 댓글 내용 -->
+                            <div class="text-muted small mb-2"
+                                 th:text="${comment.content}">
+                                댓글 내용
+                            </div>
+
+                            <!-- 작성일 -->
+                            <small class="text-muted">
+                                <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')}"></span>
+                            </small>
+
+                        </a>
+
+                    </div>
+
+                    <!-- 페이징 -->
+                    <nav th:if="${comments.totalPages > 1}" class="mt-4">
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item"
+                                th:classappend="${comments.first} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/mypage/comments(page=${comments.number - 1})}">
+                                    이전
+                                </a>
+                            </li>
+
+                            <li class="page-item"
+                                th:each="i : ${#numbers.sequence(0, comments.totalPages - 1)}"
+                                th:classappend="${i == comments.number} ? 'active'">
+                                <a class="page-link"
+                                   th:text="${i + 1}"
+                                   th:href="@{/mypage/comments(page=${i})}">
+                                </a>
+                            </li>
+
+                            <li class="page-item"
+                                th:classappend="${comments.last} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/mypage/comments(page=${comments.number + 1})}">
+                                    다음
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/mypage}"
+                           class="btn btn-outline-secondary w-50">
+                            마이페이지
+                        </a>
+                        <a th:href="@{/}"
+                           class="btn btn-outline-primary w-50">
+                            홈으로
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</th:block>
+</html>

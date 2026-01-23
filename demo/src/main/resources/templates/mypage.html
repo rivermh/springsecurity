@@ -33,30 +33,41 @@
 						</div>
 					</div>
 
-						<div class="mb-4">
-							<div class="d-flex justify-content-between">
-								<span class="text-muted">가입일</span> <span
-									th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">
-								</span>
-							</div>
+					<div class="mb-4">
+						<div class="d-flex justify-content-between">
+							<span class="text-muted">가입일</span> <span
+								th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">
+							</span>
 						</div>
-
-						<hr>
-
-						<div class="d-flex gap-2">
-							<a th:href="@{/}" class="btn btn-outline-secondary w-50"> home
-							</a>
-
-							<form th:action="@{/logout}" method="post" class="w-50">
-								<button type="submit" class="btn btn-outline-danger w-100">
-									logout</button>
-							</form>
-						</div>
-
 					</div>
-				</div>
 
+					<hr>
+
+					<div class="d-flex gap-2">
+						<a th:href="@{/}" class="btn btn-outline-secondary w-50"> home
+						</a>
+
+						<form th:action="@{/logout}" method="post" class="w-50">
+							<button type="submit" class="btn btn-outline-danger w-100">
+								logout</button>
+						</form>
+					</div>
+
+					<hr>
+
+					<div class="d-grid gap-2 mt-3">
+						<a th:href="@{/mypage/posts}" class="btn btn-outline-primary">
+							내가 쓴 글 </a> <a th:href="@{/mypage/comments}"
+							class="btn btn-outline-primary"> 내가 쓴 댓글 </a> <a
+							th:href="@{/mypage/likes}" class="btn btn-outline-primary">
+							좋아요한 글 </a>
+					</div>
+
+
+				</div>
 			</div>
+
 		</div>
+	</div>
 </th:block>
 </html>

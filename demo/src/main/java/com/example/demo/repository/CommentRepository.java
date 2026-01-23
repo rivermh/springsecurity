@@ -1,5 +1,7 @@
 package com.example.demo.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -27,4 +29,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	//댓글 단건 조회(권한 체크용)
 	@EntityGraph(attributePaths = {"user", "post"})
 	Comment findWithUserAndPostById(Long id);
+	
+	// 마이페이지 내가 쓴 댓글
+	@EntityGraph(attributePaths = {"user", "post"})
+	Page<Comment> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+	
 }
