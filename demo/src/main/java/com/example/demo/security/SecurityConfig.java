@@ -14,6 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 	private final CustomUserDetailsService customUserDetailsService;
+	private final CustomAuthenticationFailureHandler failureHandler;
+
 	
 	//비밀번호 암호화기 (BCrypt)
 	@Bean
@@ -51,7 +53,7 @@ public class SecurityConfig {
 					.usernameParameter("username")
 					.passwordParameter("password")
 					.defaultSuccessUrl("/", true)
-					.failureUrl("/login?error=true") 
+					.failureHandler(failureHandler)
 			)
 			
 			//로그아웃 설정

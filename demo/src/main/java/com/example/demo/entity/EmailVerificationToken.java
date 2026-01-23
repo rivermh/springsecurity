@@ -45,5 +45,4 @@ public class EmailVerificationToken {
 		return expiryDate.isBefore(LocalDateTime.now());
 	}
 	
-	
 }
