@@ -63,6 +63,12 @@
 							좋아요한 글 </a>
 					</div>
 
+					<form th:action="@{/mypage/withdraw}" method="post"
+						onsubmit="return confirm('정말 탈퇴하시겠습니까?');">
+
+						<button type="submit" class="btn btn-danger">회원 탈퇴</button>
+					</form>
+
 
 				</div>
 			</div>

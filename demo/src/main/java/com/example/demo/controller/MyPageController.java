@@ -3,10 +3,12 @@ package com.example.demo.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.entity.User;
 import com.example.demo.security.CustomUserDetails;
@@ -69,5 +71,20 @@ public class MyPageController {
 	            postLikeService.findLikePosts(user.getId(), pageable));
 
 	    return "mypage/likes";
+	}
+
+	//탈퇴 처리 
+	@PostMapping("/mypage/withdraw")
+	public String withdraw(@AuthenticationPrincipal CustomUserDetails userDetails) {
+		if(userDetails == null) {
+			return "redirect:/login";
+		}
+		
+		userService.withdraw(userDetails.getUsername());
+		
+		//세션/인증 정보 제거
+		SecurityContextHolder.clearContext();
+		
+		return "redirect:/login?withdraw";
 	}
 }

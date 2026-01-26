@@ -87,5 +87,9 @@ public class User {
 	    this.enabled = true;
 	}
 
+	// 회원 탈퇴 처리
+	public void deactivate() {
+		this.enabled = false;
+	}
 }
 

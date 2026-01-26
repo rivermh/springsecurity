@@ -13,7 +13,6 @@ import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.EmailVerificationTokenRepository;
-import com.example.demo.service.MailService;
 
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -107,5 +106,14 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username).orElseThrow(()-> new IllegalArgumentException("사용자 없음"));
+	}
+	
+	// 회원 탈퇴 메서드
+	@Transactional
+	public void withdraw(String username) {
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
+		
+		user.deactivate(); // enabled = false
 	}
 }
